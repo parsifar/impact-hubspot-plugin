@@ -28,11 +28,12 @@ function impact_options_page_html() {
   <?php
 }
 
-//create the setting fields and register them using the settings API
+//create the setting and preferences fields and register them using the settings API
 add_action('admin_init' , 'impact_setting_init');
 
 function impact_setting_init(){
-  //Create a section for the settings
+  // ===================== SETTINGS SECTION =====================
+  //Create the settings section
   add_settings_section(
     'impact_setting_section',
     'Impact API Settings',
@@ -149,6 +150,29 @@ function impact_setting_init(){
         'label_for' => 'hubspot_api_key'
     ] 
   );
+
+  // ===================== PREFERENCES SECTION =====================
+  //Create the preferences section
+  add_settings_section(
+    'impact_preferences_section',
+    'Preferences',
+    '',
+    'impact-menu-page'
+  );
+  
+  //register the preferences to the setting API and add the fields to the section
+  register_setting( 'impact-setting-group', 'use_random_string_id' );
+
+  add_settings_field(
+    'use_random_string_id', 
+    'Use Random IDs?',
+    'callback_use_random_string_id_HTML',
+    'impact-menu-page',
+    'impact_preferences_section', 
+    [
+        'label_for' => 'use_random_string_id'
+    ] 
+  );
 }  
 
 //render the HTML for Impact Campaign ID field
@@ -202,4 +226,11 @@ function callback_impact_api_auth_token_HTML() {
 function callback_hubspot_api_key_HTML() {
   $hubspot_api_key = get_option('hubspot_api_key');
 	echo "<input id='hubspot_api_key' name='hubspot_api_key' size='40' type='text' value='{$hubspot_api_key}' />";
+}
+
+//render the HTML for use random id field
+function callback_use_random_string_id_HTML() {
+  $use_random_string_id = get_option('use_random_string_id');
+  if($use_random_string_id) { $checked = ' checked="checked" '; }
+  echo "<input ".$checked." id='use_random_string_id' name='use_random_string_id' type='checkbox' />";
 }

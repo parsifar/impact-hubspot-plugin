@@ -47,17 +47,26 @@ function handle_impact_conversion_event(){
     $event_date = date('d-M-Y G:i:s T');
     $customer_email = sanitize_email($_POST['user_email']);
     
-    //get the contact id and conversion id from HubSpot
-    $hubspot_contact_id = 'unknown';
-    $hubspot_conversion_id = 'unknown';
-    $try_count = 0;
-    while ($hubspot_contact_id == 'unknown' && $try_count < 10){
-        //delay the execution of script for 2 second so the contact is already created on HubSpot
-        sleep(2);
-        $hubspot_contact_id = get_id_from_hubspot_api($customer_email)[0];
-        $hubspot_conversion_id = get_id_from_hubspot_api($customer_email)[1];
-        $try_count++;
+    //get the random IDs option from the database
+    $use_random_string_id = get_option('use_random_string_id');
+    //if random IDs option is selceted then generate random values for contact id and conversion id
+    if ($use_random_string_id ){
+        $hubspot_contact_id = 'random-' . rand(1000000,9999999);
+        $hubspot_conversion_id = 'random-' . rand(1000000,9999999);
+    }else{
+        //if random IDs option is not selected then get the IDs from HubSpotAPI
+        $hubspot_contact_id = 'unknown';
+        $hubspot_conversion_id = 'unknown';
+        $try_count = 0;
+        while ($hubspot_contact_id == 'unknown' && $try_count < 10){
+            //delay the execution of script for 2 second so the contact is already created on HubSpot
+            sleep(2);
+            $hubspot_contact_id = get_id_from_hubspot_api($customer_email)[0];
+            $hubspot_conversion_id = get_id_from_hubspot_api($customer_email)[1];
+            $try_count++;
+        }
     }
+    
 
     //send the data to impact API
     $result = send_data_to_impact_api($impact_campaign_id , $impact_action_tracker_id  , $impact_click_id , $event_date , $hubspot_conversion_id  , $hubspot_contact_id , $customer_email);
