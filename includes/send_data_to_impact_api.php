@@ -2,9 +2,9 @@
 //This function sends the data to impact API
 function send_data_to_impact_api($campaign_id , $action_tracker_id  , $click_id , $date , $order_id , $contact_id , $email){
     //get the Impact API endpoint and authentication details (for basic auth) from the database
-    $impact_api_endpoint = get_option('impact_api_endpoint');
-    $impact_api_account_sid = get_option('impact_api_account_sid');
-    $impact_api_auth_token = get_option('impact_api_auth_token');
+    $impact_api_endpoint = sanitize_text_field(get_option('impact_api_endpoint'));
+    $impact_api_account_sid = sanitize_text_field(get_option('impact_api_account_sid'));
+    $impact_api_auth_token = sanitize_text_field(get_option('impact_api_auth_token'));
     //create the body of the post request
     $body = array(
         'CampaignId'    => $campaign_id,
@@ -13,7 +13,7 @@ function send_data_to_impact_api($campaign_id , $action_tracker_id  , $click_id 
         'EventDate' => $date,
         'OrderId' => $order_id,
         'CustomerId' => $contact_id,
-        'CustomerEmail' => $email,
+        'CustomerEmail' => sha1($email),
     );
     //convert the body to JSON
     $body_json = wp_json_encode($body);
@@ -38,6 +38,6 @@ function send_data_to_impact_api($campaign_id , $action_tracker_id  , $click_id 
     if ($http_code == 200){
         return 'data sent to impact successfully';
     }else{
-        return 'problem in sending data to impact '. $http_code;
+        return 'problem in sending data to impact. Code: '. $http_code;
     }
 }

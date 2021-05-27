@@ -232,5 +232,5 @@ function callback_hubspot_api_key_HTML() {
 function callback_use_random_string_id_HTML() {
   $use_random_string_id = get_option('use_random_string_id');
   if($use_random_string_id) { $checked = ' checked="checked" '; }
-  echo "<input ".$checked." id='use_random_string_id' name='use_random_string_id' type='checkbox' />";
+  echo "<input ".$checked." id='use_random_string_id' name='use_random_string_id' type='checkbox' title='If this is checked, instead of the customer and conversion IDs from HubSpot, two random values will be sent to Impact API.'/>";
 }

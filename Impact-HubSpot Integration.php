@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Impact
+ * Plugin Name:       Impact-HubSpot Integration
  * Plugin URI:        https://parsifar.com/
- * Description:       Integrates WordPress with Impact API.
+ * Description:       Integrates HubSpot forms with Impact API.
  * Version:           1.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
@@ -47,7 +47,7 @@ function handle_impact_conversion_event(){
     $event_date = date('d-M-Y G:i:s T');
     $customer_email = sanitize_email($_POST['user_email']);
     
-    //get the random IDs option from the database
+    //get the random IDs option from the database (this is a checkbox in the settings page)
     $use_random_string_id = get_option('use_random_string_id');
     //if random IDs option is selceted then generate random values for contact id and conversion id
     if ($use_random_string_id ){

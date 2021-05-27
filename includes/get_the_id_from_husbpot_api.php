@@ -2,7 +2,7 @@
 //this function gets the hubspot canonical id of a contact and the first conversion id of that contact using its email and returns them in an array
 function get_id_from_hubspot_api($email){
     //get the HubSpot API key from the database
-    $hubspot_api_key = get_option('hubspot_api_key');
+    $hubspot_api_key = sanitize_text_field(get_option('hubspot_api_key'));
     $hubspot_api_endpoint = 'https://api.hubapi.com/contacts/v1/lists/all/contacts/recent?count=10&hapikey=' . $hubspot_api_key;
     //set the initial values to unknown. This will be updated and returned.
     $result = ['unknown' , 'unknown'];

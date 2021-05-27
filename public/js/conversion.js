@@ -24,7 +24,7 @@ window.addEventListener('message', event => {
           },
           function (data) {
             //callback
-            console.log("data returend from the back-end: "+data);
+            console.log("Result: " + data);
           }
         );
   }
@@ -50,7 +50,6 @@ function getCookie(cname) {
 
 //this function gets the submitted data array from HubSpot form submission and returns the email
 function getUsersEmail(hubspotDataArray){
-  console.log(hubspotDataArray)
   let userEmail = 'unknown'
   hubspotDataArray.forEach(function(item){
     if (item.name === 'email') userEmail = item.value
